@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'v2.apps.V2Config',
     'rest_framework',
     'django_filters',
-    'corsheaders'
+    'corsheaders',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -130,9 +131,18 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 CORS_ALLOWED_ORIGINS = [
     origin.strip() for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if origin.strip()
 ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'oni-recipe-api',
+    'DESCRIPTION': 'API documentation for my oni recipe api.',
+    'VERSION': '1.0.0',
+    # Optional: TBD authentication support
+    'SERVE_INCLUDE_SCHEMA': False,
+}

@@ -49,7 +49,14 @@ python manage.py createsuperuser
 # run server
 python manage.py runserver
 ```
-Visit: http://localhost:8000/api/docs/ for further help
+Visit: http://localhost:8000/api/docs/swagger/ for further help
+#### alt links
+> /api/schema
+> 
+or
+> /api/docs/redoc
+>
+___
 ## License
 
 This project is licensed under the  
