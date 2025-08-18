@@ -29,14 +29,15 @@ Most data and assets are sourced from the [Oxygen Not Included Wiki](https://oxy
 ### Run locally
 ```bash
 # clone repo
-git clone https://github.com/yourusername/oni-recipe-api.git
+git clone https://github.com/KutologoJM/oni-recipe-api.git
 cd oni-recipe-api
 
 # install dependencies
 poetry install
 
 # activate virtual environment
-poetry shell
+poetry env activate
+# if running the code outside of a virtualenv append 'poetry run' before python
 
 # make and run migrations
 python manage.py makemigrations
