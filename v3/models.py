@@ -71,7 +71,7 @@ class Orders(models.Model):
         ("canceled", "Canceled"),
     ]
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    status = models.CharField(max_length=20, choices=ORDER_STATUS, default="pending")
+    status = models.CharField(max_length=20, choices=ORDER_STATUS, default="pending", help_text="Pending, Completed or Canceled")
 
     class Meta:
         verbose_name = "Order"
@@ -97,11 +97,27 @@ class OrderItems(models.Model):
 '''
 
 
-class FoodOrdersModel(models.Model):
-    order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name='food_orders')
-    food_item = models.ForeignKey(RecipeONI, on_delete=models.CASCADE)
+class BaseOrderItem(models.Model):
     quantity = models.PositiveIntegerField()
-    category = models.CharField(max_length=30, default='Food')
+    category = models.CharField(max_length=30)
+
+    class Meta:
+        abstract = True
+
+
+class ONIElements(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.TextField(null=True, max_length=200)
+    dlc = models.CharField(max_length=5)
+
+
+class ONIBuildings(models.Model):
+    pass
+
+
+class FoodOrders(BaseOrderItem):
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name="food_orders")
+    food_item = models.ForeignKey(RecipeONI, on_delete=models.CASCADE, related_name="food_order_item")
 
     class Meta:
         verbose_name = "Food order item"
@@ -109,3 +125,26 @@ class FoodOrdersModel(models.Model):
 
     def __str__(self):
         return f"{self.quantity} × {self.food_item.name} (Order {self.order.id})"
+
+
+class ElementOrders(BaseOrderItem):
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name="element_orders")
+    element_item = models.ForeignKey(ONIElements, on_delete=models.CASCADE, related_name="element_order_item")
+
+    class Meta:
+        verbose_name = "Element order item"
+        verbose_name_plural = "Element order items"
+
+    def __str__(self):
+        return f"{self.element_item}"
+
+
+class BuildingOrders(BaseOrderItem):
+    building = models.ForeignKey(ONIBuildings, on_delete=models.CASCADE, related_name="building_order_item")
+
+    class Meta:
+        verbose_name = "Building order item"
+        verbose_name_plural = "Building order items"
+
+    def __str__(self):
+        return f"{self.building}"
