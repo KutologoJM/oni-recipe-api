@@ -38,4 +38,4 @@ class OrderItemsViewSet(viewsets.ModelViewSet):
 
 class FoodManagerViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.FoodOrderSerializer
-    queryset = models.FoodOrdersModel.objects.all()
+    queryset = models.FoodOrders.objects.all()

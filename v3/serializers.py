@@ -47,8 +47,6 @@ class RecipeONISerializer(serializers.ModelSerializer):
                   'source_image_url', 'calories_produced']
 
 
-
-
 '''
 class OrderItemsSerializer(serializers.ModelSerializer):
     order = OrdersSerializer(read_only=True)
@@ -77,18 +75,27 @@ class FoodOrderSerializer(serializers.ModelSerializer):
         queryset=models.RecipeONI.objects.all(),
         write_only=True
     )
-    order_item_id = serializers.IntegerField(source="id", read_only=True)
+    food_order_item_id = serializers.IntegerField(source="id", read_only=True)
 
     class Meta:
-        model = models.FoodOrdersModel
+        model = models.FoodOrders
         fields = [
-            "order_item_id",            # always include for updates/deletes
-            "order_id",      # write-only
+            "food_order_item_id",  # always include for updates/deletes
+            "order_id",  # write-only
             "food_item_id",  # write-only
             "product_name",  # read-only
             "quantity",
             "category",
         ]
+
+
+class ElementsOrderSerializer(serializers.ModelSerializer):
+    element_order_item_id = serializers.IntegerField(source="id", read_only=True)
+    product_name = serializers.CharField(source="element_item.name", read_only=True)
+
+    class Meta:
+        model = models.ElementOrders
+        fields = ["element_order_item_id", "product_name", "quantity", "category"]
 
 
 class OrdersSerializer(serializers.ModelSerializer):
@@ -100,8 +107,12 @@ class OrdersSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(
         source="customer.username", read_only=True
     )
-    food_orders = FoodOrderSerializer(many=True, read_only=True)
     order_id = serializers.IntegerField(source="id", read_only=True)
+    # order serializers ########
+    food_orders = FoodOrderSerializer(many=True, read_only=True)
+    element_orders = ElementsOrderSerializer(many=True, read_only=True)
+
+    #################################################################
 
     class Meta:
         model = models.Orders
@@ -111,5 +122,6 @@ class OrdersSerializer(serializers.ModelSerializer):
             "customer_id",
             "customer_name",
             "status",
-            "food_orders"
+            "food_orders",
+            "element_orders"
         ]
