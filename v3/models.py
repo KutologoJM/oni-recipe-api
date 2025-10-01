@@ -2,8 +2,15 @@ from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django.contrib.auth.models import User
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+def get_default_creator():
+    return User.objects.get(username="kutologojm").id
+
 
 class Ingredients(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ingredient_owner', default=get_default_creator)
     name = models.CharField(max_length=30)
     description = models.TextField(null=True, max_length=200)
     dlc = models.CharField(max_length=5)
@@ -24,6 +31,7 @@ class Ingredients(models.Model):
 
 
 class RecipeONI(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipe_owner', default=get_default_creator)
     name = models.CharField(unique=True, default='Placeholder', max_length=50)
     description = models.TextField(null=True, max_length=200)
     image_url = models.URLField(max_length=100, blank=True)
@@ -46,6 +54,7 @@ class RecipeONI(models.Model):
 
 
 class RecipeIngredients(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relationship_owner', default=get_default_creator)
     ROLE_CHOICES = [
         ('main', 'Main'),
         ('alternate', 'Alternate')
