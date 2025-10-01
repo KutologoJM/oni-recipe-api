@@ -154,3 +154,5 @@ SPECTACULAR_SETTINGS = {
     # Optional: TBD authentication support
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+CORS_ALLOW_CREDENTIALS = True
