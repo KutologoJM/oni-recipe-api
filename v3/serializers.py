@@ -14,14 +14,14 @@ class IngredientsSerializer(serializers.ModelSerializer):
 class RecipeIngredientsSerializer(serializers.ModelSerializer):
     ingredient = IngredientsSerializer(read_only=True)
     ingredient_id = serializers.PrimaryKeyRelatedField(
-        queryset=models.Ingredients.objects.all(),
+        queryset=models.Ingredients.objects.none(),
         source='ingredient',
         write_only=True
     )
 
     recipe = serializers.CharField(source='recipe.name', read_only=True)
     recipe_id = serializers.PrimaryKeyRelatedField(
-        queryset=models.RecipeONI.objects.all(),
+        queryset=models.RecipeONI.objects.none(),
         source='recipe',
         write_only=True
     )
@@ -33,6 +33,25 @@ class RecipeIngredientsSerializer(serializers.ModelSerializer):
             'ingredient', 'ingredient_id',
             'amount_required', 'unit', 'role'
         ]
+
+    def get_fields(self):
+        fields = super().get_fields()
+        request = self.context.get('request')
+
+        if request and hasattr(request, "user"):
+            user = request.user
+
+            if user.is_staff or user.is_superuser:
+                fields['ingredient_id'].queryset = models.Ingredients.objects.all()
+                fields['recipe_id'].queryset = models.RecipeONI.objects.all()
+            else:
+                fields['ingredient_id'].queryset = models.Ingredients.objects.filter(
+                    creator=user
+                )
+                fields['recipe_id'].queryset = models.RecipeONI.objects.filter(
+                    creator=user
+                )
+        return fields
 
 
 class RecipeONISerializer(serializers.ModelSerializer):

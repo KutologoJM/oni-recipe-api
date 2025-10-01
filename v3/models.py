@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Ingredients(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ingredient_owner', default=None)
     name = models.CharField(max_length=30)
     description = models.TextField(null=True, max_length=200)
     dlc = models.CharField(max_length=5)
@@ -24,6 +25,7 @@ class Ingredients(models.Model):
 
 
 class RecipeONI(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipe_owner', default=None)
     name = models.CharField(unique=True, default='Placeholder', max_length=50)
     description = models.TextField(null=True, max_length=200)
     image_url = models.URLField(max_length=100, blank=True)
@@ -46,6 +48,7 @@ class RecipeONI(models.Model):
 
 
 class RecipeIngredients(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relationship_owner', default=None)
     ROLE_CHOICES = [
         ('main', 'Main'),
         ('alternate', 'Alternate')
