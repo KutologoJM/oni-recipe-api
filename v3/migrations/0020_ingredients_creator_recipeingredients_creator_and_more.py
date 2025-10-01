@@ -17,16 +17,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='ingredients',
             name='creator',
-            field=models.ForeignKey(default=v3.models.get_default_creator, on_delete=django.db.models.deletion.CASCADE, related_name='ingredient_owner', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='ingredient_owner', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='recipeingredients',
             name='creator',
-            field=models.ForeignKey(default=v3.models.get_default_creator, on_delete=django.db.models.deletion.CASCADE, related_name='relationship_owner', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='relationship_owner', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='recipeoni',
             name='creator',
-            field=models.ForeignKey(default=v3.models.get_default_creator, on_delete=django.db.models.deletion.CASCADE, related_name='recipe_owner', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='recipe_owner', to=settings.AUTH_USER_MODEL),
         ),
     ]
