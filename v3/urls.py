@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from .views import *
+from django.urls import path, include
 
 router = DefaultRouter()
 router.register(r'recipes', RecipesViewSet, basename='recipes')
@@ -8,4 +9,8 @@ router.register(r'recipe-ingredients', RecipeIngredientsViewSet, basename='recip
 # router.register(r'orders', OrdersViewSet, basename='orders')
 # router.register(r'food-orders', FoodManagerViewSet, basename='order-items')
 # router.register(r'', viewset, basename='basename')
-urlpatterns = router.urls
+
+urlpatterns = [
+    path("", include(router.urls)),
+    path("showcase/", RecipeShowcaseView.as_view()),
+]

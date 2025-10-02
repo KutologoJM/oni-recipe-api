@@ -3,9 +3,21 @@ from . import models
 from . import serializers
 from accounts.permissions import *
 from rest_framework.permissions import IsAuthenticated
+from django.views.generic import ListView
 
 
 # Create your views here.
+
+class RecipeShowcaseView(ListView):
+    model = models.RecipeONI
+    template_name = "oni_recipe_api/recipe_showcase.html"
+    context_object_name = "recipes"
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
+            return models.RecipeONI.objects.all()
+        return models.RecipeONI.objects.filter(creator=user)
 
 
 class RecipesViewSet(viewsets.ModelViewSet):
